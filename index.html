@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>API DEMO</title>
+
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline'" />
+  <link rel="stylesheet" href="css/sidebar.css">
+  <link rel="stylesheet" href="css/variables.css">
+  <link rel="stylesheet" href="css/section.css">
+  <link rel="stylesheet" href="css/bases.css">
+
+  <!-- jquery 라이브러리 추가(npm --save)한 내용을 이 앱에서 사용하기 위해 아래 한줄을 추가-->
+  <script>window.$ = window.jQuery = require('jquery');</script>
+</head>
+
+<body>
+
+  <nav class="nav">
+    <header class="nav-header">
+      <h1 class="nav-title">Electron <strong>API Demos</strong></h1>
+      <div style="width: 100%; text-align: center; margin-top: 10px;"><span>(Navigation)</span></div>
+    </header>
+    <div class="nav-item u-category-windows">
+      <h5 class="nav-category">
+        Windows
+      </h5>
+      <button type="button" id="btn-nav-Windows" data-section="windows" class="nav-button">Create and manage <em>windows</em></button>
+      <button type="button" id="btn-nav-CrashHang" data-section="crash-hang" class="nav-button">Handling window <em>crashes and hangs</em></button>
+    </div>
+
+    <div class="nav-item u-category-menu">
+      <h5 class="nav-category">
+        Menus
+      </h5>
+      <button type="button" id="btn-nav-Menus" data-section="menus" class="nav-button">Customize <em>menus</em> </button>
+      <button type="button" id="btn-nav-Shortcuts" data-section="shortcuts" class="nav-button">Register keyboard <em>shortcuts</em></button>
+    </div>
+
+    <div class="nav-item u-category-native-ui">
+      <h5 class="nav-category">Native User Interface</h5>
+      <button type="button" id="btn-nav-ExLinksFileManager" data-section="ex-links-file-manager" class="nav-button">Open <em>external links</em> or system <em>file manager</em></button>
+      <button type="button" id="btn-nav-Notifications" data-section="notifications" class="nav-button"> <em>Notifications</em> with and without custom image</button>
+      <button type="button" id="btn-nav-Dialogs" data-section="dialogs" class="nav-button">Use system <em>dialogs</em></button>
+      <button type="button" id="btn-nav-Tray" data-section="tray" class="nav-button">Put your app in the <em>tray</em></button>
+      <button type="button" id="btn-nav-Drag" data-section="drag" class="nav-button"><em>Drag</em> and drop files</button>
+    </div>
+
+    <div class="nav-item u-category-communication">
+      <h5 class="nav-category">
+        Communication
+      </h5>
+      <button type="button" id="btn-nav-ipc" data-section="ipc" class="nav-button">Communicate between the <em>two processes</em></button>
+    </div>
+
+    <div class="nav-item u-category-system">
+      <h5 class="nav-category">
+        System
+      </h5>
+      <button type="button" id="btn-nav-appSysInformation" data-section="app-sys-information" class="nav-button">Get app or user <em>system information</em></button>
+      <button type="button" id="btn-nav-clipboard" data-section="clipboard" class="nav-button">Copy and paste from the <em>clipboard</em></button>
+      <button type="button" id="btn-nav-protocol" data-section="protocol" class="nav-button">Launch app from <em>protocol handler</em></button>
+    </div>
+
+    <div class="nav-item u-category-media">
+      <h5 class="nav-category">
+        Media
+      </h5>
+      <button type="button" id="btn-nav-desktopCapturer" data-section="desktop-capturer" class="nav-button">Take a
+        <em>screenshot</em></button>
+    </div>
+
+    <div class="nav-item">
+      <h5 class="nav-category">
+        xml Parsing
+      </h5>
+      
+      <button type="button" id="btn-nav-xmlParsing" data-section="desktop-capturer" class="nav-button">parsing of 
+        <em>xml file</em></button>
+    </div>
+
+  </nav>
+
+  <div class="section">
+    <header class="section-header">
+      <h1> Electron API DEMOS (Content) ! </h1>
+
+      We are using node
+      <script>document.write(process.versions.node)</script> Chrome
+      <script>document.write(process.versions.chrome)</script>,
+      and Electron
+      <script>document.write(process.versions.electron)</script>.
+    </header>
+
+    <div class="section-content">
+
+      <div id="manageForWindow">
+        <div class="section-category" >
+          [ Window - Create and manage windows ]
+        </div>
+
+        <div class="section-description">
+            <strong>Electron의 BrowserWidow 모듈을 사용하면 새 브라우저 창을 만들거나 기존 브라우저 창을 관리 할 수 있습니다.</strong><br />
+            각 브라우저 창은 렌더 프로세스라고하는 별도의 프로세스입니다.<br />
+            이 프로세스는 앱의 수명주기를 제어하는 기본 프로세스와 마찬가지로 Node.js Apis에 대한 전체 액세스 권한을 갖습니다.
+        </div>
+
+        <pre>
+          <p>
+            Description : 메인 윈도우 창 에서 새로운 윈도우 창 생성하기 
+            Action : <button id="createWindow">생성</button>
+            Source : <button id="btn-source-createWindow">소스 보기</button>
+
+            Description : 메인 윈도우 창 에서 새로운 윈도우 창의 크기(width, height) 와 좌표(x, y) 표시 
+            Action : <span id="manageWindow">Size : , Position : </span>
+            Source : <button id="btn-source-manageWindow">소스 보기</button>
+
+            Description : 메인 윈도우 창 에서 프레임 없는 새로운 윈도우 창 생성
+            Action : <button id="framelessWindow">윈도우 창 생성</button>
+            Source : <button id="btn-source-framelessWindow">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="handleForWindow">
+        <div class="section-category" >
+          [ Window - Handling window crashes and hangs ]
+        </div>
+
+        <pre>
+          <p>
+            Description : 프로세스가 충돌 후 윈도우 창 다시 시작 
+            Action : <button id="crashWindow">생성</button>
+            Source : <button id="btn-source-crashWindow">소스 보기</button>
+
+            Description : 프로세스가 중단 후 윈도우 창을 다시 시작
+            Action : <button id="hangWindow">생성</button>
+            Source : <button id="btn-source-hangWindow">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="customizeForMenu">
+        <div class="section-category">
+          [ Menu - Customize menus]
+        </div>
+        
+        <pre>
+          <p>
+            Description : 응용 프로그램의 메뉴바 생성하기 (create an application menu)
+            Action : 
+            Source : <button id="btn-source-menuWindow">소스 보기</button>
+
+            Description : Context 에서 메뉴 생성하기 (create context menu)
+            Action : <button id="contextPopup">팝업</button>
+            Source : <button id="btn-source-contextPopup">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="shortcutForMenu">
+        <div class="section-category">
+          [ Menu - Register keyboard shortcuts]
+        </div>
+        
+        <pre>
+          <p>
+            Description : 단축키 생성하기 (Register a global keyboard shortcuts)
+            Action :  ( ex. It was applied to DevTool. )
+            Source : <button id="btn-source-shortcuts">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="fileManagerForNative">
+        <div class="section-category">
+          [ Native User Interface - Open external links or System file Manager ]
+        </div>
+
+        <pre>
+          <p>
+            Description : 파일 관리자 열기  (Open path file Manager)
+            Active: ( 기본 위치 - /home/user_ID ): <button id="fileOpen">열기</button>
+            Source : <button id="btn-source-fileManager">소스 보기</button>
+
+            Description : 외부 링크 관리자 열기 - 브라우져 (Open external Link Manager)
+            Active :  ( 기본 링크 - www.naver.com ): <button id="externalOpen">열기</button>
+            Source : <button id="btn-source-linkManager">소스 보기</button>
+          </p>
+        </pre>
+
+      </div>
+      
+      <div id="notificationForNative">
+        <div class="section-category">
+          [ Native User Interface - Notifications with and without customImage ]
+        </div>
+
+        <pre>
+          <p>
+            Description : 운영체제 기반의 기본 알림창 열기 (Basic Notifications)
+            Active :  <button id="basicNotification">알림</button>
+            Source : <button id="btn-source-notification">소스 보기</button>
+
+            Description : 운영체제 기반의 아이콘 포함한 기본 알림창 열기 (Notifications with Image)
+            Active : <button id="imageNotification">알림(이미지)</button>
+            Source : <button id="btn-source-notificationWithImage">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+      
+      <div id="dialogForNative">
+        <div class="section-category">
+          [ Native User Interface - use System Dialog ]
+        </div>
+
+        <pre>
+          <p>
+            Description : 파일 또는 디렉토리 다이얼 로그 열기 (Open file or Directory Dialog)
+            Active : ( path : <span id="selectedPath"></span> ) : <button id="fileDialog">열기</button>
+            Source : <button id="btn-source-dirDialog">소스 보기</button>
+
+            Description : 에러 다이얼 로그 열기 (Error Dialog)
+            Active : <button id="errorDialog">열기</button>
+            Source : <button id="btn-source-errDialog">소스 보기</button>
+
+            Description : 확인 여부 다이얼 로그 열기 (information Dialog)
+            Active :  ( select : <span id="selectedInformation"></span> ) : <button id="informationDialog">열기</button>
+            Source : <button id="btn-source-infoDialog">소스 보기</button>
+
+            Description : 저장 다이얼 로그 열기 (Save Dialog)
+            Active : ( fileName : <span id="selectedSave"></span> ) : <button id="saveDialog">열기</button>
+            Source : <button id="btn-source-saveDialog">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+      
+      <div id="trayForNative">
+        <div class="section-category">
+          [ Native User Interface - put your app in the tray ]          
+        </div>
+
+        <pre>
+          <p>
+            Description : 독 창에 나의 프로그램 아이콘 표시 및 제거 (put your app in the tray)
+            Active : ( state : <span id="trayState"></span>) : <button id="tray">TRAY</button>
+            Source : <button id="btn-source-tray">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="dragAndDropForNative">
+        <div class="section-category">
+          [ Native User Interface - Drag and drop files ]
+        </div>
+
+        <pre>
+          <p>
+            Description : Fail .... 
+            Active : <a href="#" id="drag-file-link" >Drag & Drop</a>
+            Source : <button id="btn-source-dragAndDrop">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="forCommunication">
+        <div class="section-category">
+          [ COMMUNICATION - Communicate between the two process ]
+        </div>
+
+        <pre>
+          <p>
+            Description : 두 프로세스 간의 비 동기식 통신 ( Main process - Renderer process)
+                          (Communication between process - Asynchronous Message )
+            Action : ( replay : <span id="async-receive"></span> ) <button id="async-send">메세지 요청(Request)</button> 
+            Source : <button id="btn-source-asyncComunication">소스 보기</button>
+
+            Description : 두 프로세스 간의 동기식 통신 ( Main process - Renderer process)
+                          ( Communication between process - synchronous Message )
+            Action : ( replay : <span id="sync-receive"></span> ) <button id="sync-send">메세지 요청(Request)</button> 
+            Source : <button id="btn-source-syncComunication">소스 보기</button>
+
+            Description : 화면이 보이지 않는 윈도우 창을 생성하여 통신 ( communication with an invisible window )
+            Action : ( replay : <span id="invisible-window-receive"></span> ) <button id="invisible-window-send">메세지 요청(Request)</button> 
+            Source : <button id="btn-source-windowComunication">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="informationForSystem">
+        <div class="section-category">
+          [ System - Get App or user system information ]
+        </div>
+
+        <pre>
+          <p>
+            Description : 시스템의 Electron 버젼 정보 가져오기 ( Get Electron versions )
+            Action : ( Electron Version : <span id="version"></span> ) <button id="electronVersion">Electron 정보</button>
+            Source : <button id="btn-source-electronVersionInformation">소스 보기</button>
+
+            Description : 시스템의 Home 디렉토리 정보 가져오기 () Get home dir information )
+            Action : ( information : <span id="hInformation"></span> ) <button id="homeInformation">OS 정보</button>
+            Source : <button id="btn-source-homeInformation">소스 보기</button>
+
+            Description : 시스템의 화면 정보 가져오기 ( Get screen information )
+            Action : ( information : <span id="sInformation"></span> ) <button id="screenInformation">앱 화면 정보</button>
+            Source : <button id="btn-source-screenInformation">소스 보기</button>
+
+            Description : 시스템에서 현재 실행중인 프로그램의 정보 (프로젝트 위치) 가져오기 ( Get app information )
+            Action : ( information : <span id="information"></span> ) <button id="appInformation">앱 정보</button>
+            Source : <button id="btn-source-appInformation">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="clipboardForSystem">
+        <div class="section-category">
+          [ System - Copy and paste from the Clipboard ]
+        </div>
+
+        <pre>
+          <p>
+            Description : 클립 보드에서 정보 복사 하기 ( Copy from the clipboard )
+                          * 아무 값도 복사 하지 않으면 기본 값을 "Electron Demo!" 값을 클립보드에 복사한다.
+            Action : ( result : <input type="text" id="copyInformation" style="width: 200px;"> ) <button id="copyClipboard">Copy</button>
+            Source : <button id="btn-source-copyClip">소스 보기</button>
+
+            Description : 클립 보드에서 복사한 정보 확인하기 ( Paste from the clipboard )
+                          * 아무 값도 복사 하지 않으면 기본 값을 "Electron Demo!" 값을 클립보드에 복사한다.
+            Action : ( result : <span id="pasteInformation"></span>) <button id="pasteClipboard">Paste</button>
+            Source : <button id="btn-source-pasteClip">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="launchForSystem">
+        <div class="section-category">
+          [ System - Launch app from protocol handler ]
+        </div>
+
+        <pre>
+          <p>
+            Description : 다른 프로세스에서 URL 로 다른 프로세스 실행하기 ( Landch app from Url in another app )
+            Action : <button id="lanchAnother">URL 열기</button>
+            Source : <button id="btn-source-lanchAnother">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+      <div id="screenshotForMedia">
+        <div class="section-category">
+          [ Media - Take a screenshot ]
+        </div>
+
+        <pre>
+          <p>
+            Description : Take a screenshot
+            Action : ( result : <span id="screenshot"></span> ) <button id="btnScreenshot">찍기</button>
+            Source : <button id="btn-source-screenshot">소스 보기</button>
+          </p>
+        </pre>
+      </div>
+
+    </div>
+
+
+
+    <div class="section-source">
+      <div class="section-category" >
+        [ Source ]
+      </div>
+
+      <div class="process">
+        <h4> * main process ( <span id="main-process-filename"></span> )</h4>
+        <pre>
+          <code><span id="main-content"></span></code>
+        </pre>
+
+        <h4> * renderer process ( <span id="renderer-process-filename"></span> )</h4>
+        <pre>
+          <code><span id="renderer-content"></span></code>
+        </pre>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+
+  /* IMPORT */
+  const rootPath = __dirname;
+  require(rootPath + '/renderer-process/window/createWindow')
+  require(rootPath + '/renderer-process/window/crashWindow')
+  require(rootPath + '/renderer-process/window/hangWindow')
+  require(rootPath + '/renderer-process/menu/contextMenu')
+  require(rootPath + '/renderer-process/native-ui/fileOpen')
+  require(rootPath + '/renderer-process/native-ui/externalOpen')
+  require(rootPath + '/renderer-process/native-ui/basicNotification')
+  require(rootPath + '/renderer-process/native-ui/imageNotification')
+  require(rootPath + '/renderer-process/native-ui/fileDialog')
+  require(rootPath + '/renderer-process/native-ui/errorDialog')
+  require(rootPath + '/renderer-process/native-ui/informationDialog')
+  require(rootPath + '/renderer-process/native-ui/saveDialog')
+  require(rootPath + '/renderer-process/native-ui/tray')
+  require(rootPath + '/renderer-process/communication/asyncCommunication')
+  require(rootPath + '/renderer-process/communication/syncCommunication')
+  require(rootPath + '/renderer-process/communication/invisible')
+  require(rootPath + '/renderer-process/system/appInformation')
+  require(rootPath + '/renderer-process/system/clipboard')
+  require(rootPath + '/renderer-process/system/protocolHandler')
+  require(rootPath + '/renderer-process/media/screenshot')
+  
+
+  $(document).ready(function () {
+
+    /* DEFINE */
+
+    var fs = require('fs')
+
+    var $mainContent = $('.section-source').find('#main-content');
+    var $mainProcessFileName = $('#main-process-filename')
+    var $rendererContent = $('.section-source').find('#renderer-content');
+    var $rendererProcessFileName = $('#renderer-process-filename')
+
+
+    var renderer = 'renderer'
+    var main = 'main'
+    var xml ='xml'
+
+    /* FUNCTION */
+
+    // 초기화 하기 
+    var initialize = function () {
+      
+      $('.section-content').find('div').hide()
+
+      $('.section-source > div').hide()
+
+      console.log("start  !! ");
+    };
+
+    // API 데모 내용 보기
+    var showContent = (id) => {
+      if (typeof id === 'undefined') {
+          console.log(`${id} is undefined `)
+          return;
+      }
+
+      $('.section-content > div').hide()
+
+      $('.section-source > div').hide()
+
+      $(`#${id}`).show()
+
+      $(`#${id}`).children('div').show()
+
+    }
+
+    // API 데모 소스 보기
+    var showSource = (fileName, processType) => {
+
+      $('.section-source > div').show()
+
+      if (typeof fileName === 'undefined' ) {
+        console.log('error : fileName is undefined')
+        return;
+      }
+
+      if (typeof processType === 'undefined' ) {
+        console.log('error : processType is undefined')
+        return;
+      }
+
+      readFile(fileName, processType)
+    }
+
+    var showXml = (fileName, processType) => {
+
+      $('.section-source > div').show()
+
+      if (typeof fileName === 'undefined' ) {
+        console.log('error : fileName is undefined')
+        return;
+      }
+
+      if (typeof processType === 'undefined' ) {
+        console.log('error : processType is undefined')
+        return;
+      }
+
+      readFile(fileName, xml)
+    }
+
+    // 파일 데이터 읽기
+    var readFile = (fileName, processType) => {
+        switch(processType) {
+          case main :
+            _readFile(fileName, $mainContent, $mainProcessFileName)
+            break;
+          case renderer:
+            _readFile(fileName, $rendererContent, $rendererProcessFileName)
+            break;
+          case xml:
+            _readXmlFile(fileName, $rendererContent, $rendererProcessFileName)
+          break;
+        }
+    }
+
+    // 파일 데이터 읽기
+    var _readFile = (fileName, contentArea, fileNameArea) => {
+
+      if (typeof fileName === 'undefined') {
+        contentArea.html('')
+        fileNameArea.html('')
+      } 
+
+      if ( fileName == '' ) {
+        contentArea.html('')
+        fileNameArea.html('')
+      }
+
+      fs.readFile(fileName, 'utf8', (err, data) => {
+        if ( err) {
+          console.log(err)
+          return err
+        }
+
+        contentArea.html($.trim(data))
+        fileNameArea.html(fileName)
+      })
+
+    }
+
+    var _readXmlFile = (fileName, contentArea, fileNameArea) => {
+
+      if (typeof fileName === 'undefined') {
+        contentArea.html('')
+        fileNameArea.html('')
+      } 
+
+      if ( fileName == '' ) {
+        contentArea.html('')
+        fileNameArea.html('')
+      }
+
+      fs.readFile(fileName, 'utf8', (err, data) => {
+        if ( err) {
+          console.log(err)
+          return err
+        }
+
+        var xml = data
+        var xmlDoc = $.parseXML(data)
+        var $xml = $(xmlDoc)
+        var $contentHeader = $xml.find("contentHeader")
+        alert('extract of ContentHeader Area \n' + $contentHeader.html())
+
+        contentArea.text(data)
+        fileNameArea.html(fileName)
+      })
+
+    }
+
+
+
+    /* EVENT */
+
+    //  navigation
+
+    $('#backgroundTest').on('click', function () {
+      initialize();
+    });
+
+    $('#btn-nav-Windows').on('click', () => {
+      showContent('manageForWindow');
+    })
+
+    $('#btn-nav-CrashHang').on('click', () => {
+      showContent('handleForWindow');
+    })
+
+    $('#btn-nav-Menus').on('click', () => {
+      showContent('customizeForMenu');
+    })
+
+    $('#btn-nav-Shortcuts').on('click', () => {
+      showContent('shortcutForMenu');
+    })
+
+    $('#btn-nav-ExLinksFileManager').on('click', () => {
+      showContent('fileManagerForNative');
+    })
+
+    $('#btn-nav-Notifications').on('click', () => {
+      showContent('notificationForNative');
+    })
+
+    $('#btn-nav-Dialogs').on('click', () => {
+      showContent('dialogForNative');
+    })
+
+    $('#btn-nav-Tray').on('click', () => {
+      showContent('trayForNative');
+    })
+
+    $('#btn-nav-Drag').on('click', () => {
+      showContent('dragAndDropForNative');
+    })
+
+    $('#btn-nav-ipc').on('click', () => {
+      showContent('forCommunication');
+    })
+
+    $('#btn-nav-appSysInformation').on('click', () => {
+      showContent('informationForSystem');
+    })
+
+    $('#btn-nav-clipboard').on('click', () => {
+      showContent('clipboardForSystem');
+    })
+
+    $('#btn-nav-protocol').on('click', () => {
+      showContent('launchForSystem');
+    })
+
+    $('#btn-nav-desktopCapturer').on('click', () => {
+      showContent('screenshotForMedia');
+    })
+
+
+    // source 
+    
+    $('#btn-source-createWindow').on('click', () => {
+      var rendererFileName = rootPath + '/renderer-process/window/createWindow.js'
+      showSource('', main);
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-manageWindow').on('click', () => {
+      var rendererFileName = rootPath + '/renderer-process/window/createWindow.js'
+      showSource('', main);
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-framelessWindow').on('click', () => {
+      var rendererFileName = rootPath + '/renderer-process/window/createWindow.js'
+      showSource('', main);
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-crashWindow').on('click', () => {
+      var rendererFileName = rootPath + '/renderer-process/window/crashWindow.js'
+      showSource('', main);
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-hangWindow').on('click', () => {
+      var rendererFileName = rootPath + '/renderer-process/window/hangWindow.js'
+      showSource('', main);
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-menuWindow').on('click', () => {
+      var mainFileName = rootPath + '/main-process/menu/menuWindow.js'
+
+      showSource(mainFileName, main)
+      showSource('', renderer);
+    })
+
+    $('#btn-source-contextPopup').on('click', () => {
+      var mainFileName = rootPath + '/main-process/menu/contextMenu.js'
+      var rendererFileName = rootPath + '/renderer-process/menu/contextMenu.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+    
+    $('#btn-source-shortcuts').on('click', () => {
+      var mainFileName = rootPath + '/main-process/menu/menuWindow.js'
+
+      showSource(mainFileName, main)
+      showSource('', renderer);
+    })
+
+
+    $('#btn-source-fileManager').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/native-ui/fileOpen.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-linkManager').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/native-ui/externalOpen.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-notification').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/native-ui/basicNotification.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-notificationWithImage').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/native-ui/imageNotification.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-dirDialog').on('click', () => {
+      var mainFileName = rootPath + '/main-process/native-ui/fileDialog.js'
+      var rendererFileName = rootPath + '/renderer-process/native-ui/fileDialog.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-errDialog').on('click', () => {
+      var mainFileName = rootPath + '/main-process/native-ui/errorDialog.js'
+      var rendererFileName = rootPath + '/renderer-process/native-ui/errorDialog.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+    
+    $('#btn-source-infoDialog').on('click', () => {
+      var mainFileName = rootPath + '/main-process/native-ui/informationDialog.js'
+      var rendererFileName = rootPath + '/renderer-process/native-ui/informationDialog.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-saveDialog').on('click', () => {
+      var mainFileName = rootPath + '/main-process/native-ui/saveDialog.js'
+      var rendererFileName = rootPath + '/renderer-process/native-ui/saveDialog.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-tray').on('click', () => {
+      var mainFileName = rootPath + '/main-process/native-ui/tray.js'
+      var rendererFileName = rootPath + '/renderer-process/native-ui/tray.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-dragAndDrop').on('click', () => {
+      var mainFileName = rootPath + '/main-process/native-ui/drag.js'
+      var rendererFileName = rootPath + '/renderer-process/native-ui/drag.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-asyncComunication').on('click', () => {
+      var mainFileName = rootPath + '/main-process/communication/asyncCommunication.js'
+      var rendererFileName = rootPath + '/renderer-process/communication/asyncCommunication.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-syncComunication').on('click', () => {
+      var mainFileName = rootPath + '/main-process/communication/syncCommunication.js'
+      var rendererFileName = rootPath + '/renderer-process/communication/syncCommunication.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-windowComunication').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/communication/invisible.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-electronVersionInformation').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/system/appInformation.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-homeInformation').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/system/appInformation.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-screenInformation').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/system/appInformation.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-appInformation').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/system/appInformation.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-copyClip').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/system/clipboard.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-pasteClip').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/system/clipboard.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-lanchAnother').on('click', () => {
+      var mainFileName = rootPath + '/main-process/'
+      var rendererFileName = rootPath + '/renderer-process/system/clipboard.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-source-screenshot').on('click', () => {
+      var mainFileName = ''
+      var rendererFileName = rootPath + '/renderer-process/media/screenshot.js'
+
+      showSource(mainFileName, main)
+      showSource(rendererFileName, renderer);
+    })
+
+    $('#btn-nav-xmlParsing').on('click', () => {
+      showXml(rootPath + '/xml/plc.txt', xml)
+    })
+
+    /* LOADING */
+
+    initialize();
+
+  });
+</script>
+
+</html>

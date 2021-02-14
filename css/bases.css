@@ -1,0 +1,13 @@
+/* FONT TYPE */
+
+.bold {
+    font-weight: bold;
+}
+
+.lighter {
+    font-weight: lighter;
+}
+
+.initial {
+    font-weight: initial;
+}
