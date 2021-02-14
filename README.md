@@ -2,7 +2,7 @@
 
 ** Electron 을 실행 하려면 다음과 같이 따라하시면 됩니다. **
 
-이 프로그램은 electronjs 응용 프로그램 기반에 [bootstrap Guide](https://github.com/wooyoungkwak/electronjs-api-demo.git) 을 적용한 최소한의 응용 프로그램 입니다. 
+이 프로그램은 electronjs 응용 프로그램 기반에 [api-demo Guide](https://github.com/wooyoungkwak/electronjs-api-demo.git) 을 적용한 최소한의 응용 프로그램 입니다. 
 
 다음의 파일들은 Electron 응용 프로그램의 기본 요소입니다:
 - `package.json` - 앱의 기본 파일을 가리키고 세부 정보 및 종속성을 나열합니다.
